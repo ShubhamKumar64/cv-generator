@@ -1,0 +1,132 @@
+/* === General Layout === */
+html, body {
+  font-family: 'Segoe UI', sans-serif;
+  background: url("images/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* === Container === */
+.container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+}
+
+/* === Headings === */
+h2, h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* === Inputs & Textareas === */
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* === Buttons === */
+button {
+  /* width: 100%; */
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Give form buttons full width separately */
+form button {
+  width: 100%;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* === CV Preview Box === */
+.cv, #cvPreview {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* === Dark Mode === */
+.dark-mode {
+  background-color: #121212;
+  color: #eee;
+}
+.dark-mode .container {
+  background-color: #1f1f1f;
+}
+/* .dark-mode input,
+.dark-mode textarea {
+  background-color: #333;
+  color: #eee;
+}
+.dark-mode button {
+  background-color: #444;
+  color: #fff;
+} */
+
+/* === Logout Button === */
+.top-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 999;
+  width: auto;
+}
+.top-button:hover {
+  background-color: #bb2d3b;
+}
+
+/* === Theme Toggle === */
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+/* === Print Mode (CV Only) === */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #cvPreview, #cvPreview * {
+    visibility: visible;
+  }
+  #cvPreview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
