@@ -1,4 +1,23 @@
-document.getElementById("cvForm").addEventListener("submit", async function(e) {
+
+
+
+let uploadedImageBase64 = "";
+
+document.getElementById("profilePic").addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (event) {
+    uploadedImageBase64 = event.target.result;
+    document.getElementById("preview").src = uploadedImageBase64;
+  };
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById("cvForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const data = {
@@ -10,30 +29,23 @@ document.getElementById("cvForm").addEventListener("submit", async function(e) {
     experience: document.getElementById("experience").value,
   };
 
-  const res = await fetch("http://localhost:5000/api/save-cv", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-
-  const msg = await res.text();
-  alert(msg);
-
-  // ✅ Clean & inject CV preview
   const preview = document.getElementById("cvPreview");
   preview.innerHTML = `
-    <h3>${data.name}</h3>
-    <p><strong>Email:</strong> ${data.email}</p>
-    <p><strong>Phone:</strong> ${data.phone}</p>
-    <p><strong>Education:</strong><br>${data.education.replace(/\n/g, "<br>")}</p>
-    <p><strong>Skills:</strong><br>${data.skills.replace(/\n/g, "<br>")}</p>
-    <p><strong>Experience:</strong><br>${data.experience.replace(/\n/g, "<br>")}</p>
+    <div class="cv-left">
+      <img src="${uploadedImageBase64}" />
+      <h4>${data.name}</h4>
+    </div>
+    <div class="cv-right">
+      <div class="cv-section"><strong>Email:</strong> ${data.email}</div>
+      <div class="cv-section"><strong>Phone:</strong> ${data.phone}</div>
+      <div class="cv-section"><strong>Education:</strong><br>${data.education.replace(/\n/g, "<br>")}</div>
+      <div class="cv-section"><strong>Skills:</strong><br>${data.skills.replace(/\n/g, "<br>")}</div>
+      <div class="cv-section"><strong>Experience:</strong><br>${data.experience.replace(/\n/g, "<br>")}</div>
+    </div>
   `;
 
   document.getElementById("downloadBtn").style.display = "inline-block";
 });
-
-
 
 document.getElementById("downloadBtn").addEventListener("click", () => {
   const cvElement = document.getElementById("cvPreview");
@@ -51,4 +63,3 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
     pdf.save("My_CV.pdf");
   });
 });
-

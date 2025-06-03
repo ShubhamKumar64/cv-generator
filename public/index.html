@@ -1,20 +1,387 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta http-equiv="refresh" content="0">
-  <script>
-    // Check login state
-    if (localStorage.getItem("loggedIn")) {
-      window.location.href = "cv.html"; // your CV form page
-    } else {
-      window.location.href = "login.html"; // show login page
-    }
-  </script>
-  <title>Redirecting...</title>
-</head>
-<body>
-  <p>Redirecting...</p>
-  
+<!-- 
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CV Builder - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #e8f0ff, #ffffff);
+      color: #1a1a1a;
+    }
+
+    header {
+      padding: 20px 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    header h2 {
+      margin: 0;
+      color: #007bff;
+    }
+
+    header nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #007bff;
+      padding: 8px 16px;
+      border: 2px solid #007bff;
+      border-radius: 20px;
+      transition: 0.3s;
+    }
+
+    header nav a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 10%;
+      flex-wrap: wrap;
+    }
+
+    .hero-text {
+      max-width: 50%;
+    }
+
+    .hero-text h1 {
+      font-size: 42px;
+      margin-bottom: 20px;
+      color: #011f4b;
+    }
+
+    .hero-text p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .hero-text a {
+      background-color: #ffc107;
+      padding: 12px 25px;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 30px;
+      color: #000;
+      margin-right: 15px;
+      transition: 0.3s;
+    }
+
+    .hero-text a:hover {
+      background-color: #e0a800;
+    }
+
+    .hero-img img {
+      max-width: 400px;
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-text, .hero-img {
+        max-width: 100%;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      header nav a {
+        margin: 5px;
+      }
+    }
+    /* ✨ Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ✨ Apply animation to main sections */
+.hero-text {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+
+.hero-img img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: slideUp 1s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.3s;
+}
+
+/* ✨ Animate buttons */
+.hero-text a {
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+.hero-img img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+  </style>
+</head>
+<body onload="document.body.classList.add('loaded')">
+
+
+  <header>
+    <h2>CV Builder</h2>
+    <nav>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Create Your Professional CV</h1>
+      <p>Design a stunning resume that grabs attention and helps you land your dream job. Fast, free, and customizable.</p>
+      <a href="register.html">Start Building</a>
+      <a href="login.html" style="background: transparent; border: 2px solid #007bff; color: #007bff;">Already have an account?</a>
+    </div>
+    <div class="hero-img">
+      <img src="https://via.placeholder.com/400x500?text=CV+Template" alt="CV Preview" />
+    </div>
+  </section>
+
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CV Builder - Home</title>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #f2f2f2;
+      color: #1a1a1a;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      padding: 20px 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h2 {
+      margin: 0;
+      color: #007bff;
+    }
+
+    header nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #007bff;
+      padding: 8px 16px;
+      border: 2px solid #007bff;
+      border-radius: 20px;
+      transition: 0.3s;
+    }
+
+    header nav a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    section {
+      padding: 60px 10%;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 20px;
+      color: #011f4b;
+    }
+
+    .typewriter {
+      display: inline-block;
+      border-right: 2px solid black;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 4s steps(30, end) forwards, blink 1s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: black; }
+    }
+
+    /* Reveal animation for scroll-section */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+    <!-- .scroll-section {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 80px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    } -->
+
+    .scroll-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+    <!-- .scroll-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    } -->
+
+    .scroll-section.visible {
+  animation: reveal 0.8s ease-out forwards;
+}
+
+    .scroll-section img {
+      width: 300px;
+      border-radius: 10px;
+    }
+
+    .scroll-section:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    footer {
+      padding: 30px;
+      background: #007bff;
+      color: white;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .scroll-section {
+        flex-direction: column !important;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body onload="document.body.classList.add('loaded')">
+
+  <header>
+    <h2>CV Builder</h2>
+    <nav>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1><span class="typewriter">Create your dream CV in minutes</span></h1>
+    <p>Professional templates, easy editing, and instant downloads. Let your resume shine.</p>
+  </section>
+
+  <section style="text-align:center; margin-top: -40px;">
+  <lottie-player
+    src="https://assets7.lottiefiles.com/packages/lf20_5ngs2ksb.json"
+    background="transparent"
+    speed="1"
+    style="width: 300px; height: 300px;"
+    loop
+    autoplay>
+  </lottie-player>
+  <h2 style="margin-top: 10px;">Build, Customize & Download Your CV</h2>
+</section>
+
+
+  <section class="scroll-section">
+    <img src="images/template1.jpg" alt="Template 1">
+    <div>
+      <h2>Elegant Templates</h2>
+      <p>Choose from professionally designed templates to make your resume stand out.</p>
+    </div>
+  </section>
+
+  <section class="scroll-section">
+    <img src="images/editor.jpg" alt="Editor">
+    <div>
+      <h2>Easy Editor</h2>
+      <p>Fill in your details, adjust the layout, and generate your CV on the fly.</p>
+    </div>
+  </section>
+
+  <section class="scroll-section">
+    <img src="images/pdf.jpg" alt="PDF">
+    <div>
+      <h2>Instant Download</h2>
+      <p>Download your CV in PDF format instantly after building it — totally free.</p>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 CV Builder. All rights reserved.
+  </footer>
+
+  <script>
+    // Scroll animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.scroll-section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
 </body>
 </html>

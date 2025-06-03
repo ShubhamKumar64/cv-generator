@@ -69,14 +69,14 @@ button:hover {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* === Dark Mode === */
+/* === Dark Mode ===
 .dark-mode {
   background-color: #121212;
   color: #eee;
 }
 .dark-mode .container {
   background-color: #1f1f1f;
-}
+} */
 /* .dark-mode input,
 .dark-mode textarea {
   background-color: #333;
@@ -107,13 +107,13 @@ button:hover {
 }
 
 /* === Theme Toggle === */
-.theme-toggle {
+/* .theme-toggle {
   position: absolute;
   top: 20px;
   right: 20px;
   color: white;
   font-weight: bold;
-}
+} */
 
 /* === Print Mode (CV Only) === */
 @media print {
@@ -130,3 +130,47 @@ button:hover {
     width: 100%;
   }
 }
+
+/* Classic Template */
+.template1 {
+  background-color: #fff;
+  color: #000;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Modern Template */
+.template2 {
+  background-color: #f4f4f4;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+  border-left: 5px solid #007bff;
+  padding-left: 10px;
+}
+
+/* Dark Template */
+.template3 {
+  background-color: #222;
+  color: #eee;
+  font-family: 'Courier New', monospace;
+}
+
+/* === Register Page Animation === */
+.form-wrapper {
+  animation: zoomSlide 1s ease-out forwards;
+  transform: scale(0.9) translateY(50px);
+  opacity: 0;
+}
+
+@keyframes zoomSlide {
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+
+.lottie-wrap {
+  text-align: center;
+  margin-bottom: -10px;
+}
+
