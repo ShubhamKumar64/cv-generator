@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
 <head>
   <title>Modern CV Generator</title>
   <link rel="stylesheet" href="style.css" />
@@ -114,5 +114,503 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Professional CV Generator</title>
+  <style>
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #f5f5f5;
+      padding: 20px;
+      margin: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    /* Form Styling */
+    .form-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #2c3e50;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    input, textarea {
+      padding: 12px 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 6px;
+      font-family: 'Georgia', serif;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+    }
+
+    /* A4 Resume Preview */
+    #cvPreview {
+      width: 794px;
+      min-height: 1123px;
+      margin: 30px auto;
+      padding: 50px;
+      background: #ffffff;
+      box-shadow: 0 0 30px rgba(0,0,0,0.1);
+      border: 1px solid #ddd;
+      display: none;
+      flex-direction: column;
+      font-family: 'Georgia', serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Resume Header */
+    .resume-header {
+      text-align: center;
+      border-bottom: 3px solid #2c3e50;
+      padding-bottom: 25px;
+      margin-bottom: 35px;
+    }
+
+    .resume-name {
+      font-size: 28pt;
+      font-weight: bold;
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .resume-title {
+      font-size: 14pt;
+      color: #7f8c8d;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 10pt;
+    }
+
+    .contact-item {
+      color: #34495e;
+      font-weight: 500;
+    }
+
+    /* Resume Sections */
+    .resume-section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: bold;
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: #e74c3c;
+    }
+
+    /* Experience/Education Entries */
+    .resume-entry {
+      margin-bottom: 20px;
+      padding-left: 25px;
+      border-left: 3px solid #ecf0f1;
+      position: relative;
+    }
+
+    .resume-entry::before {
+      content: '';
+      position: absolute;
+      left: -7px;
+      top: 5px;
+      width: 11px;
+      height: 11px;
+      background: #3498db;
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .entry-title {
+      font-weight: bold;
+      font-size: 12pt;
+      color: #2c3e50;
+    }
+
+    .entry-date {
+      font-size: 9pt;
+      color: #7f8c8d;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .entry-company {
+      font-size: 11pt;
+      color: #34495e;
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .entry-description {
+      font-size: 10pt;
+      line-height: 1.5;
+    }
+
+    /* Skills Section */
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .skill-item {
+      background: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 4px;
+      border-left: 4px solid #3498db;
+      font-size: 10pt;
+    }
+
+    /* Download Button */
+    #downloadBtn {
+      margin-top: 25px;
+      background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+      display: none;
+    }
+
+    @media print {
+      body { background: white; }
+      .container { box-shadow: none; }
+      #cvPreview { box-shadow: none; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Professional Resume Builder</h1>
+
+    <!-- Form -->
+    <form id="cvForm">
+      <div class="form-section">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="name" placeholder="John Doe" required />
+        </div>
+        <div class="form-group">
+          <label>Professional Title</label>
+          <input type="text" id="title" placeholder="Software Engineer" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="john@example.com" required />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+1 (555) 123-4567" required />
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" id="address" placeholder="123 Main St, City, State 12345" />
+        </div>
+        <div class="form-group">
+          <label>LinkedIn Profile</label>
+          <input type="url" id="linkedin" placeholder="linkedin.com/in/johndoe" />
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Professional Summary</label>
+        <textarea id="summary" placeholder="Brief professional summary highlighting your key skills and experience..."></textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Work Experience (Separate each job with '---')</label>
+        <textarea id="experience" placeholder="Software Engineer | Tech Company | 2020-Present
+Developed web applications using React and Node.js
+Collaborated with cross-functional teams to deliver projects on time
+---
+Junior Developer | StartupCo | 2018-2020
+Built responsive websites using HTML, CSS, and JavaScript"></textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Education (Separate each degree with '---')</label>
+        <textarea id="education" placeholder="Bachelor of Science in Computer Science | University Name | 2014-2018
+Relevant coursework: Data Structures, Algorithms, Software Engineering"></textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Skills (One per line)</label>
+        <textarea id="skills" placeholder="JavaScript
+React.js
+Node.js
+Python
+SQL
+Git"></textarea>
+      </div>
+
+      <button type="submit">Generate Resume</button>
+    </form>
+
+    <!-- Resume Preview -->
+    <div id="cvPreview">
+      <div class="resume-header">
+        <h1 class="resume-name" id="displayName">Your Name</h1>
+        <div class="resume-title" id="displayTitle">Professional Title</div>
+        <div class="contact-info">
+          <span class="contact-item" id="displayEmail">email@example.com</span>
+          <span class="contact-item" id="displayPhone">+1 (555) 123-4567</span>
+          <span class="contact-item" id="displayAddress">Address</span>
+          <span class="contact-item" id="displayLinkedin">LinkedIn</span>
+        </div>
+      </div>
+
+      <div class="resume-section" id="summarySection">
+        <h2 class="section-title">Professional Summary</h2>
+        <div id="displaySummary">Professional summary will appear here...</div>
+      </div>
+
+      <div class="resume-section" id="experienceSection">
+        <h2 class="section-title">Professional Experience</h2>
+        <div id="displayExperience"></div>
+      </div>
+
+      <div class="resume-section" id="educationSection">
+        <h2 class="section-title">Education</h2>
+        <div id="displayEducation"></div>
+      </div>
+
+      <div class="resume-section" id="skillsSection">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-container" id="displaySkills"></div>
+      </div>
+    </div>
+
+    <button id="downloadBtn">Download PDF</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('cvForm');
+      const preview = document.getElementById('cvPreview');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Update basic info
+        document.getElementById('displayName').textContent = document.getElementById('name').value || 'Your Name';
+        document.getElementById('displayTitle').textContent = document.getElementById('title').value || 'Professional Title';
+        document.getElementById('displayEmail').textContent = document.getElementById('email').value || 'email@example.com';
+        document.getElementById('displayPhone').textContent = document.getElementById('phone').value || '+1 (555) 123-4567';
+        document.getElementById('displayAddress').textContent = document.getElementById('address').value || 'Address';
+        document.getElementById('displayLinkedin').textContent = document.getElementById('linkedin').value || 'LinkedIn';
+        document.getElementById('displaySummary').textContent = document.getElementById('summary').value || 'Professional summary will appear here...';
+
+        // Process experience
+        const experience = document.getElementById('experience').value;
+        const expContainer = document.getElementById('displayExperience');
+        expContainer.innerHTML = '';
+        
+        if (experience.trim()) {
+          experience.split('---').forEach(job => {
+            if (job.trim()) {
+              const lines = job.trim().split('\n');
+              const header = lines[0].split(' | ');
+              
+              const entry = document.createElement('div');
+              entry.className = 'resume-entry';
+              entry.innerHTML = `
+                <div class="entry-header">
+                  <div class="entry-title">${header[0] || 'Job Title'}</div>
+                  <div class="entry-date">${header[2] || 'Date'}</div>
+                </div>
+                <div class="entry-company">${header[1] || 'Company Name'}</div>
+                <div class="entry-description">${lines.slice(1).join('<br>') || 'Job description...'}</div>
+              `;
+              expContainer.appendChild(entry);
+            }
+          });
+        }
+
+        // Process education
+        const education = document.getElementById('education').value;
+        const eduContainer = document.getElementById('displayEducation');
+        eduContainer.innerHTML = '';
+        
+        if (education.trim()) {
+          education.split('---').forEach(edu => {
+            if (edu.trim()) {
+              const lines = edu.trim().split('\n');
+              const header = lines[0].split(' | ');
+              
+              const entry = document.createElement('div');
+              entry.className = 'resume-entry';
+              entry.innerHTML = `
+                <div class="entry-header">
+                  <div class="entry-title">${header[0] || 'Degree'}</div>
+                  <div class="entry-date">${header[2] || 'Date'}</div>
+                </div>
+                <div class="entry-company">${header[1] || 'School Name'}</div>
+                <div class="entry-description">${lines.slice(1).join('<br>') || 'Education details...'}</div>
+              `;
+              eduContainer.appendChild(entry);
+            }
+          });
+        }
+
+        // Process skills
+        const skills = document.getElementById('skills').value;
+        const skillsContainer = document.getElementById('displaySkills');
+        skillsContainer.innerHTML = '';
+        
+        if (skills.trim()) {
+          skills.split('\n').forEach(skill => {
+            if (skill.trim()) {
+              const skillDiv = document.createElement('div');
+              skillDiv.className = 'skill-item';
+              skillDiv.textContent = skill.trim();
+              skillsContainer.appendChild(skillDiv);
+            }
+          });
+        }
+
+        preview.style.display = 'flex';
+        downloadBtn.style.display = 'block';
+        
+        // Scroll to preview
+        preview.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Download functionality
+      downloadBtn.addEventListener('click', function() {
+        const element = document.getElementById('cvPreview');
+        
+        html2canvas(element, { 
+          scale: 2,
+          useCORS: true,
+          allowTaint: true
+        }).then(canvas => {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const imgData = canvas.toDataURL('image/png');
+          const imgWidth = 210;
+          const pageHeight = 295;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
+          let position = 0;
+
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+
+          pdf.save('resume.pdf');
+        }).catch(error => {
+          console.error('Error generating PDF:', error);
+          alert('Error generating PDF. Please try again.');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
