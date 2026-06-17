@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const mysql = require("mysql2");
@@ -7,7 +8,7 @@ const bcrypt = require("bcrypt");
 
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(cors()); // 👈 ye CORS allow karega
 app.use(express.json()); // ✅ FOR JSON parsing
@@ -65,10 +66,10 @@ app.post("/login", async (req, res) => {
 });
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "mysql@123",
-  database: "cv"
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "mysql@123",
+  database: process.env.DB_NAME || "cv"
 });
 
 db.connect((err) => {
