@@ -55,48 +55,5 @@
       }
     });
   </script>
-
-
-  <script>
-    // Theme toggle logic
-    <!-- const themeToggle = document.getElementById("themeToggle");
-    window.onload = () => {
-      const savedTheme = localStorage.getItem("theme") || "light";
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-        themeToggle.checked = true;
-      }
-    };
-    themeToggle.addEventListener("change", () => {
-      if (themeToggle.checked) {
-        document.body.classList.add("dark-mode");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.body.classList.remove("dark-mode");
-        localStorage.setItem("theme", "light");
-      }
-    }); -->
-
-    // Register logic
-    document.getElementById("registerForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value,
-      };
-      const res = await fetch("http://localhost:5000/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      const msg = await res.text();
-      document.getElementById("registerMsg").textContent = msg;
-      if (msg === "User registered successfully") {
-        alert("Registered! Please log in.");
-        window.location.href = "login.html";
-      }
-    });
-  </script>
 </body>
 </html>
