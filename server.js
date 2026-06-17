@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require("express");
 const path = require("path");
-const mysql = require("mysql2");
+const { Pool } = require("pg");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
@@ -21,8 +21,6 @@ app.get("/", (req, res) => {
 
 
 app.post("/register", async (req, res) => {
-  // console.log("REQ.BODY = ", req.body); // 👈 CHECK what data is coming
-
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return res.status(400).send("Missing fields");
@@ -30,18 +28,13 @@ app.post("/register", async (req, res) => {
 
   try {
     const hashed = await bcrypt.hash(password, 10);
-    const sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+    const sql = "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)";
 
-    db.query(sql, [name, email, hashed], (err, result) => {
-      if (err) {
-        console.error("Registration error:", err); // 👈 SHOW REAL DB ERROR
-        return res.status(500).send("User already exists or error");
-      }
-      res.send("User registered successfully");
-    });
+    await pool.query(sql, [name, email, hashed]);
+    res.send("User registered successfully");
   } catch (err) {
-    console.error("Server error:", err);
-    res.status(500).send("Server error");
+    console.error("Registration error:", err);
+    return res.status(500).send("User already exists or error");
   }
 });
 
@@ -50,73 +43,80 @@ app.post("/register", async (req, res) => {
 // User login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const sql = "SELECT * FROM users WHERE email = ?";
+  const sql = "SELECT * FROM users WHERE email = $1";
 
-  db.query(sql, [email], async (err, result) => {
-    if (err || result.length === 0) {
+  try {
+    const result = await pool.query(sql, [email]);
+    if (result.rows.length === 0) {
       return res.status(400).send("Invalid email");
     }
 
-    const user = result[0];
+    const user = result.rows[0];
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).send("Invalid password");
 
     res.send("Login successful");
-  });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).send("Server error");
+  }
 });
 
-const db = mysql.createConnection({
+const pool = new Pool({
   host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "mysql@123",
-  database: process.env.DB_NAME || "cv"
+  user: process.env.DB_USER || "postgres",
+  password: process.env.DB_PASSWORD || "password",
+  database: process.env.DB_NAME || "cv",
+  port: process.env.DB_PORT || 5432
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log("MySQL Connected");
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
 });
+
+console.log("PostgreSQL Pool initialized");
 
 // Form submit → insert data → redirect to CV page
-app.post("/generate-cv", (req, res) => {
+app.post("/generate-cv", async (req, res) => {
   const { name, email, phone, education, skills, experience } = req.body;
-  const sql = "INSERT INTO cvs (name, email, phone, education, skills, experience) VALUES (?, ?, ?, ?, ?, ?)";
-  db.query(sql, [name, email, phone, education, skills, experience], (err, result) => {
-    if (err) throw err;
-    const newId = result.insertId;
+  const sql = "INSERT INTO cvs (name, email, phone, education, skills, experience) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id";
+  try {
+    const result = await pool.query(sql, [name, email, phone, education, skills, experience]);
+    const newId = result.rows[0].id;
     res.redirect(`/cv/${newId}`);
-  });
+  } catch (err) {
+    console.error("Insert error:", err);
+    res.status(500).send("Database error");
+  }
 });
 
 
-app.post('/api/save-cv', (req, res) => {
-  console.log("Received CV data:", req.body); // 👈 ADD THIS
+app.post('/api/save-cv', async (req, res) => {
+  console.log("Received CV data:", req.body);
 
   const { name, email, phone, education, skills, experience } = req.body;
-
   const sql = `INSERT INTO cvs (name, email, phone, education, skills, experience)
-               VALUES (?, ?, ?, ?, ?, ?)`;
+               VALUES ($1, $2, $3, $4, $5, $6)`;
 
-  db.query(sql, [name, email, phone, education, skills, experience], (err, result) => {
-    if (err) {
-      console.error("Insert error:", err); // 👈 ADD THIS
-      return res.status(500).send("Database error");
-    }
-
-    console.log("CV inserted successfully"); // 👈 ADD THIS
+  try {
+    await pool.query(sql, [name, email, phone, education, skills, experience]);
+    console.log("CV inserted successfully");
     res.send("CV saved successfully!");
-  });
+  } catch (err) {
+    console.error("Insert error:", err);
+    return res.status(500).send("Database error");
+  }
 });
 
 
 // CV preview page data
-app.get("/cv/:id", (req, res) => {
+app.get("/cv/:id", async (req, res) => {
   const id = req.params.id;
-  const sql = "SELECT * FROM cvs WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) throw err;
-    if (result.length > 0) {
-      const data = result[0];
+  const sql = "SELECT * FROM cvs WHERE id = $1";
+  try {
+    const result = await pool.query(sql, [id]);
+    if (result.rows.length > 0) {
+      const data = result.rows[0];
       res.send(`
         <html>
           <head><title>CV Preview</title></head>
@@ -134,7 +134,10 @@ app.get("/cv/:id", (req, res) => {
     } else {
       res.send("CV not found");
     }
-  });
+  } catch (err) {
+    console.error("Query error:", err);
+    res.status(500).send("Server error");
+  }
 });
 
 app.listen(port, () => {
