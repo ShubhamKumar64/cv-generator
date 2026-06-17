@@ -10,6 +10,21 @@ const bcrypt = require("bcrypt");
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Initialize PostgreSQL Pool BEFORE routes
+const pool = new Pool({
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "postgres",
+  password: process.env.DB_PASSWORD || "password",
+  database: process.env.DB_NAME || "cv",
+  port: process.env.DB_PORT || 5432
+});
+
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+});
+
+console.log("PostgreSQL Pool initialized");
+
 app.use(cors()); // 👈 ye CORS allow karega
 app.use(express.json()); // ✅ FOR JSON parsing
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,19 +77,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-const pool = new Pool({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "password",
-  database: process.env.DB_NAME || "cv",
-  port: process.env.DB_PORT || 5432
-});
-
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-});
-
-console.log("PostgreSQL Pool initialized");
 
 // Form submit → insert data → redirect to CV page
 app.post("/generate-cv", async (req, res) => {
