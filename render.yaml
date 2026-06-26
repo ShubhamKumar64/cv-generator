@@ -1,7 +1,6 @@
 databases:
   - name: cv-db
     databaseName: cv
-    user: postgres
     plan: free
 
 services:
