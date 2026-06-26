@@ -1,3 +1,9 @@
+databases:
+  - name: cv-db
+    databaseName: cv
+    user: postgres
+    plan: free
+
 services:
   - type: web
     name: cv-generator
@@ -8,13 +14,9 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: DB_HOST
-        scope: run
-      - key: DB_USER
-        scope: run
-      - key: DB_PASSWORD
-        scope: run
-      - key: DB_NAME
-        scope: run
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cv-db
+          property: connectionString
       - key: PORT
         value: 10000
